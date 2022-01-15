@@ -155,21 +155,22 @@ app/node_modules
 
 
 # local env files
-app/.env.local
-app/.env.*.local
+/app/.env.local
+/app/.env.*.local
 
 # Log files
-app/npm-debug.log*
-app/yarn-debug.log*
-app/yarn-error.log*
-app/pnpm-debug.log*
+/app/npm-debug.log*
+/app/yarn-debug.log*
+/app/yarn-error.log*
+/app/pnpm-debug.log*
 
 # Editor directories and files
-app/.idea
-app/.vscode
-app/*.suo
-app/*.ntvs*
-app/*.njsproj
-app/*.sln
-app/*.sw?
 
+/app/.vscode
+/app/*.suo
+/app/*.ntvs*
+/app/*.njsproj
+/app/*.sln
+/app/*.sw?
+
+/app/.idea/
