@@ -2,7 +2,7 @@
   <nav-bar/>
   <aside-menu :menu="menu"/>
   <router-view/>
-  <footer-bar/>
+<!--  <footer-bar/>-->
 </template>
 
 <script>
@@ -24,36 +24,16 @@ export default {
   setup () {
     const store = useStore()
 
-    store.commit('user', {
-      name: 'John Doe',
-      email: 'john@example.com',
-      avatar: 'https://avatars.dicebear.com/v2/gridy/John-Doe.svg'
-    })
-
     const menu = ref(
       [
-        'General',
-        [
-          {
-            to: '/',
-            icon: mdiDesktopMac,
-            label: 'Dashboard'
-          }
-        ],
         'Apps',
         [
           {
-            to: '/minter',
-            label: 'Minter',
+            to: '/multisig-minter',
+            label: 'Multi-sig Minter',
             icon: mdiTable,
             updateMark: true
           },
-          {
-            to: '/tables',
-            label: 'Tables',
-            icon: mdiTable,
-            updateMark: true
-          }
         ],
         'About',
         [
@@ -63,7 +43,7 @@ export default {
             icon: mdiHelpCircle
           },
           {
-            href: 'https://github.com/bloxbean',
+            href: 'https://github.com/bloxbean/bloxbean-playground',
             label: 'GitHub',
             icon: mdiGithub
           }

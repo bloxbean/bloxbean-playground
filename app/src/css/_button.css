@@ -41,6 +41,18 @@
   @apply bg-gray-100 border-gray-100 hover:bg-gray-200;
 }
 
+.button.amber {
+  @apply bg-amber-500 border-amber-500 text-white hover:bg-amber-600;
+}
+
+.button.cyan {
+  @apply bg-cyan-500 border-cyan-500 text-white hover:bg-cyan-600;
+}
+
+.button.violet {
+  @apply bg-violet-500 border-violet-500 text-white hover:bg-violet-600;
+}
+
 .buttons {
   @apply flex items-center flex-wrap justify-start;
 }

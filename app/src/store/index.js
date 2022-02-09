@@ -1,38 +1,35 @@
 import { createStore } from 'vuex'
+import Wallet from "../util/wallet";
 
 export default createStore({
   state: {
-    /* User */
-    userName: null,
-    userEmail: null,
-    userAvatar: null,
-
-    /* FormScreen - fullscreen form layout (e.g. login page) */
-    isFormScreen: false,
-
-    /* Aside */
+    wallet: new Wallet(),
+    address: null,
+    connected: false,
+    // /* Aside */
     isAsideMobileExpanded: false
   },
   mutations: {
+    setAddress(state, add) {
+      state.address = add
+      state.connected = true
+    },
+    disconnect(state) {
+      state.address = null
+      state.connected = false
+      state.wallet.reset()
+    },
     /* A fit-them-all commit */
     basic (state, payload) {
       state[payload.key] = payload.value
     },
-
-    /* User */
-    user (state, payload) {
-      if (payload.name) {
-        state.userName = payload.name
-      }
-      if (payload.email) {
-        state.userEmail = payload.email
-      }
-      if (payload.avatar) {
-        state.userAvatar = payload.avatar
-      }
-    }
   },
   actions: {
+    async doConnect({commit, state}, walletType) {
+      await state.wallet.connect(walletType)
+      const address = await state.wallet.getUseAddress()
+      commit('setAddress', address)
+    },
     asideMobileToggle ({ commit, state }, payload = null) {
       const isShow = payload !== null ? payload : !state.isAsideMobileExpanded
 
@@ -45,14 +42,11 @@ export default createStore({
         value: isShow
       })
     },
-    formScreenToggle ({ commit, state }, payload) {
-      commit('basic', {
-        key: 'isFormScreen',
-        value: payload
-      })
-
-      document.documentElement.classList[payload ? 'add' : 'remove']('form-screen')
-    }
+  },
+  getters: {
+      getAddress: state => {
+        return state.address
+      }
   },
   modules: {
   }

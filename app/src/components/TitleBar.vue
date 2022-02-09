@@ -2,22 +2,10 @@
   <section class="p-6 border-b border-gray-100">
     <div class="level">
       <div class="level-left">
-<!--        <div class="level-item">-->
-<!--          <ul>-->
-<!--            <li v-for="(title, index) in titleStack" :key="index" class="title-stack-item inline-block pr-3 text-2xl text-gray-500">-->
-<!--              {{ title }}-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
       </div>
       <div class="level-right">
         <div class="level-item">
-          <div class="buttons is-right">
-            <a href="https://bloxbean.com" target="_blank" class="button blue" @click.prevent="prevent">
-              <icon :path="mdiCreditCard" class="mr-3" />
-              <span>Conntect To Wallet</span>
-            </a>
-          </div>
+
         </div>
       </div>
     </div>
@@ -37,13 +25,19 @@ export default {
       default: () => []
     }
   },
-  setup () {
-    const prevent = () => {
-      alert('Coming soon')
-    }
+  data() {
+    return ({
 
-    return {
-      prevent,
+    });
+  },
+  computed: {
+
+  },
+  methods: {
+
+  },
+  setup () {
+   return {
       mdiCreditCard
     }
   }

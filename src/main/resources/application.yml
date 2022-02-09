@@ -1,0 +1,36 @@
+---
+micronaut:
+  application:
+    name: bloxbean-playground-api
+  server:
+    port: ${PORT:8080}
+    cors:
+      enabled: true
+      single-header: true
+      configurations:
+        web:
+          allowedOrigins:
+#            - ^http(|s)://192.168.0.244:808(0|1|2|3|4)$
+#            - ^http(|s)://192.168.0.228:808(0|1|2|3|4)$
+            - ^http(|s)://localhost:808(0|1|2)$
+            - ^http(|s):\/\/playground\.bloxbean\.com$
+            - ^http(|s):\/\/playground-test\.bloxbean\.com$
+          allowedMethods:
+            - POST
+            - PUT
+            - GET
+---
+redis:
+  uri: redis://localhost
+#  caches:
+#    stake:
+#      expire-after-write: 5m
+#      maximumSize: 50
+#    reward-histories:
+#      expire-after-write: 1m
+#      maximumSize: 3
+  key-serializer: io.micronaut.jackson.serialize.JacksonObjectSerializer
+  value-serializer: io.micronaut.jackson.serialize.JacksonObjectSerializer
+
+---
+bf_project_id:

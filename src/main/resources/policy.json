@@ -1,0 +1,14 @@
+{
+  "name": "policy-1",
+  "policyScript": {
+    "type": "sig",
+    "keyHash": "ccf4467b48cb353638796318fe006870e5e3f2344025e762aa6778f1"
+  },
+  "policyKeys": [
+    {
+      "type": "PaymentVerificationKeyShelley_ed25519",
+      "description": "Payment Signing Key",
+      "cborHex": "5820f72a036c7042542cb1cb9330faf06dd1e9158c1b35659caa3669932f23f0286b"
+    }
+  ]
+}

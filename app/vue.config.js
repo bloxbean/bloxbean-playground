@@ -11,6 +11,9 @@ module.exports = {
     return {
       externals: {
         moment: 'moment'
+      },
+      experiments: {
+        asyncWebAssembly: true
       }
     }
   }

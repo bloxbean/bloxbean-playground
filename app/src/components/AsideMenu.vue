@@ -6,7 +6,7 @@
   >
     <aside-tools is-main-menu>
       <template #label>
-        <b class="font-black">BloxBean</b>
+        <b class="font-black text-2xl">BloxBean</b> <span class="italic text-xs font-semibold">Playground</span>
       </template>
     </aside-tools>
     <div>

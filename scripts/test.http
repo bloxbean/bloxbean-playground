@@ -1,0 +1,21 @@
+###
+POST http://localhost:8080/minter/tx-body
+Content-Type: application/json
+
+{
+  "address": "addr_test1qzx9hu8j4ah3auytk0mwcupd69hpc52t0cw39a65ndrah86djs784u92a3m5w475w3w35tyd6v3qumkze80j8a6h5tuqq5xe8y",
+  "quantity": 1
+}
+
+###
+POST http://localhost:8080/minter/mint
+Content-Type: application/json
+
+{
+  "reqId": "req_id_f4c7de9f-19e6-4422-bae1-b939e36e9312",
+  "walletWitnessHex": "a10081825820720f3255e00946db45e823ca03d7300ccd0f488a0b5008f47740b6f5c5186aad58403bbc41d62247b7132ba32fcd6126e050144e85265aa37ff95723477f48db5261731b8cb7c630eb806f6c968d9e8b40ea0c0a8e55c84d828e5a6029252122950c"
+}
+
+###
+
+
