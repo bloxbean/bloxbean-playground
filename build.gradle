@@ -58,7 +58,7 @@ dependencies {
 
 
 application {
-    mainClass.set("com.bloxbean.Application")
+    mainClass.set("com.bloxbean.playground.Application")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")

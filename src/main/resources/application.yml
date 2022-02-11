@@ -22,15 +22,8 @@ micronaut:
 ---
 redis:
   uri: redis://localhost
-#  caches:
-#    stake:
-#      expire-after-write: 5m
-#      maximumSize: 50
-#    reward-histories:
-#      expire-after-write: 1m
-#      maximumSize: 3
   key-serializer: io.micronaut.jackson.serialize.JacksonObjectSerializer
   value-serializer: io.micronaut.jackson.serialize.JacksonObjectSerializer
 
 ---
-bf_project_id:
+bf_testnet_project_id:
