@@ -261,14 +261,15 @@ public class MinterService {
 
         Result<String> result = blockchainService.getTransactionService().submitTransaction(signedTxn.serialize());
 
-        waitForTransactionHash(result);
-        System.out.println(result);
+        if (result.isSuccessful()) {
+            System.out.println(result);
+            NFTMetadata nftMetadata = NFTMetadata.create(signedTxn.getAuxiliaryData().getMetadata().serialize());
+            MintingResult mintingResult = new MintingResult(true, result.getValue(), nftMetadata.toJson());
 
-        NFTMetadata nftMetadata = NFTMetadata.create(signedTxn.getAuxiliaryData().getMetadata().serialize());
-
-        MintingResult mintingResult = new MintingResult(true, result.getValue(), nftMetadata.toJson());
-
-        return mintingResult;
+            return mintingResult;
+        } else {
+            throw new RuntimeException("Transaction failed. Error message: " + result.getResponse());
+        }
     }
 
     protected void waitForTransactionHash(Result<String> result) {
