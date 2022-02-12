@@ -26,6 +26,8 @@ import com.bloxbean.cardano.client.util.HexUtil;
 import com.bloxbean.cardano.client.util.JsonUtil;
 import com.bloxbean.playground.common.BlockchainService;
 import com.bloxbean.playground.common.RandomGenerator;
+import com.bloxbean.playground.minter.model.MintingResult;
+import com.bloxbean.playground.minter.model.MintingTxnBody;
 import io.lettuce.core.api.StatefulRedisConnection;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

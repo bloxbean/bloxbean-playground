@@ -10,9 +10,7 @@ micronaut:
       configurations:
         web:
           allowedOrigins:
-#            - ^http(|s)://192.168.0.244:808(0|1|2|3|4)$
-#            - ^http(|s)://192.168.0.228:808(0|1|2|3|4)$
-            - ^http(|s)://localhost:808(0|1|2)$
+            - ^http(|s)://localhost:808(0|1|2|3|4|5)$
             - ^http(|s):\/\/playground\.bloxbean\.com$
             - ^http(|s):\/\/playground-test\.bloxbean\.com$
           allowedMethods:

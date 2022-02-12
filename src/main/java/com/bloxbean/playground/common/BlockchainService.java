@@ -25,7 +25,7 @@ public class BlockchainService {
     EpochService epochService;
     UtxoTransactionBuilder utxoTransactionBuilder;
 
-    public BlockchainService(@Value("${bf_project_id}")String bfProjectId) {
+    public BlockchainService(@Value("${bf_testnet_project_id}")String bfProjectId) {
         BackendService backendService =
                 BackendFactory.getBlockfrostBackendService(Constants.BLOCKFROST_TESTNET_URL, bfProjectId);
 
