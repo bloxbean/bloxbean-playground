@@ -3,7 +3,7 @@
  */
 module.exports = {
   publicPath: process.env.DEPLOY_ENV === 'GH_PAGES'
-    ? '/admin/'
+    ? '/'
     : '/',
 
   // Remove moment.js from chart.js
