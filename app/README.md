@@ -1,4 +1,1 @@
-Admin template
-# admin-template
-# admin-template
-# bloxbean-dashboard
+## BloxBean Playground Web App
