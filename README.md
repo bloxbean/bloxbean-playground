@@ -1,5 +1,10 @@
 ## BloxBean Playground
 
+### Demo
+https://playground.bloxbean.com/
+
+**Note:** Try only with Testnet account 
+
 ## Build Java Backend
 
 ```
