@@ -7,11 +7,12 @@ import co.nstant.in.cbor.model.Map;
 import com.bloxbean.cardano.client.account.Account;
 import com.bloxbean.cardano.client.backend.exception.ApiException;
 import com.bloxbean.cardano.client.backend.model.Result;
-import com.bloxbean.cardano.client.backend.model.TransactionContent;
 import com.bloxbean.cardano.client.backend.model.Utxo;
 import com.bloxbean.cardano.client.cip.cip25.NFT;
 import com.bloxbean.cardano.client.cip.cip25.NFTMetadata;
+import com.bloxbean.cardano.client.coinselection.UtxoSelectionStrategy;
 import com.bloxbean.cardano.client.coinselection.UtxoSelector;
+import com.bloxbean.cardano.client.coinselection.impl.DefaultUtxoSelectionStrategyImpl;
 import com.bloxbean.cardano.client.coinselection.impl.DefaultUtxoSelector;
 import com.bloxbean.cardano.client.common.model.Networks;
 import com.bloxbean.cardano.client.crypto.SecretKey;
@@ -36,10 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.bloxbean.cardano.client.common.ADAConversionUtil.adaToLovelace;
 import static com.bloxbean.cardano.client.common.CardanoConstants.LOVELACE;
@@ -135,27 +133,29 @@ public class MinterService {
         UtxoSelector utxoSelector = new DefaultUtxoSelector(blockchainService.getUtxoService());
 
         //Find utxo with only lovelace
-        Utxo utx = utxoSelector.findFirst(mintingAddress, (ux) -> {
-            return ux.getAmount().size() == 1 && ux.getAmount().stream()
+        Optional<Utxo> optionalUtxo = utxoSelector.findFirst(mintingAddress, (ux) -> ux.getAmount().size() == 1 && ux.getAmount().stream()
+                .filter(amount -> amount.getUnit().equals(LOVELACE)
+                        && amount.getQuantity().compareTo(totalAmount) == 1)
+                .findFirst().isPresent());
+
+        if (optionalUtxo.isEmpty()) { //If no utxo with only LOVELACE found, check utxo with multiasset
+            optionalUtxo = utxoSelector.findFirst(mintingAddress, (ux) -> ux.getAmount().stream()
                     .filter(amount -> amount.getUnit().equals(LOVELACE)
                             && amount.getQuantity().compareTo(totalAmount) == 1)
-                    .findFirst().isPresent();
-        });
-
-        if (utx == null) { //If no utxo with only LOVELACE found, check utxo with multiasset
-            utx = utxoSelector.findFirst(mintingAddress, (ux) -> {
-                return ux.getAmount().stream()
-                        .filter(amount -> amount.getUnit().equals(LOVELACE)
-                                && amount.getQuantity().compareTo(totalAmount) == 1)
-                        .findFirst().isPresent();
-            });
+                    .findFirst().isPresent());
         }
 
-        if (utx == null)
-            throw new RuntimeException("Utxo with amount " + amountToTransfer + " not found");
-
         List<Utxo> utxos = new ArrayList<>();
-        utxos.add(utx);
+
+        if (optionalUtxo.isEmpty()) {
+            UtxoSelectionStrategy utxoSelectionStrategy = new DefaultUtxoSelectionStrategyImpl(blockchainService.getUtxoService());
+            utxos = utxoSelectionStrategy.selectUtxos(mintingAddress, LOVELACE, totalAmount, Collections.EMPTY_SET);
+        } else {
+            utxos.add(optionalUtxo.get());
+        }
+
+        if (utxos == null || utxos.size() == 0)
+            throw new RuntimeException("Utxo with amount " + amountToTransfer + " not found");
 
         //Inputs
         List<TransactionInput> inputs = new ArrayList<>();
@@ -169,6 +169,13 @@ public class MinterService {
             copyUtxoValuesToOutput(changeOutput, utxo);
         }
 
+        //Sort inputs
+        inputs.sort(new Comparator<TransactionInput>() {
+            @Override
+            public int compare(TransactionInput o1, TransactionInput o2) {
+                return (o1.getTransactionId() + "#" + o1.getIndex()).compareTo(o2.getTransactionId() + "#" + o2.getIndex());
+            }
+        });
 
         //Deduct token price + mintOutput amount
         BigInteger remainingAmount = changeOutput.getValue().getCoin()
@@ -217,7 +224,6 @@ public class MinterService {
 
         //clone
         Transaction cloneTransaciton = Transaction.deserialize(transaction.serialize());
-//        cloneTransaciton = TransactionSigner.INSTANCE.sign(cloneTransaciton, policy.getPolicyKeys().get(0));
         cloneTransaciton.setWitnessSet(null); //clear witness
         cloneTransaciton.setAuxiliaryData(null); //clear metadata
         String cloneTxnHex = cloneTransaciton.serializeToHex();
@@ -272,25 +278,4 @@ public class MinterService {
         }
     }
 
-    protected void waitForTransactionHash(Result<String> result) {
-        try {
-            if (result.isSuccessful()) { //Wait for transaction to be mined
-                int count = 0;
-                while (count < 180) {
-                    Result<TransactionContent> txnResult = blockchainService.getTransactionService().getTransaction(result.getValue());
-                    if (txnResult.isSuccessful()) {
-                        System.out.println(JsonUtil.getPrettyJson(txnResult.getValue()));
-                        break;
-                    } else {
-                        System.out.println("Waiting for transaction to be processed ....");
-                    }
-
-                    count++;
-                    Thread.sleep(2000);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
