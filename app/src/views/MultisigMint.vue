@@ -39,10 +39,18 @@
                         @click="buildTransaction"
                         type="submit"
                         class="button blue"
-                        v-if="!processing">
+                        v-if="!processing && connected">
                   <span>Click To Mint</span>
                 </button>
                 <span v-else>{{processingMsg}}</span>
+
+                <button :class="address? '': 'disabled:opacity-75'"
+                        @click="buildTransaction"
+                        type="submit"
+                        class="button blue"
+                        v-if="!connected" disabled>
+                  <span>Not Connected</span>
+                </button>
               </div>
             </control>
           </field>
