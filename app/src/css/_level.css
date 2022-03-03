@@ -1,49 +1,49 @@
 .level {
-  @apply items-center justify-between	md:flex;
+    @apply items-center justify-between    md:flex;
 }
 
 .level-left {
-  @apply justify-start;
+    @apply justify-start;
 }
 
 .level-right {
-  @apply justify-end;
+    @apply justify-end;
 }
 
 .level-left, .level-right {
-  @apply items-center flex-grow-0 flex-shrink-0 md:flex;
+    @apply items-center flex-grow-0 flex-shrink-0 md:flex;
 }
 
-.level-left+.level-right {
-  @apply mt-6 md:mt-0;
+.level-left + .level-right {
+    @apply mt-6 md:mt-0;
 }
 
 .level-item {
-  @apply items-center flex flex-grow-0 flex-shrink-0 justify-center;
+    @apply items-center flex flex-grow-0 flex-shrink-0 justify-center;
 }
 
 .level-left .level-item:not(:last-child), .level-right .level-item:not(:last-child) {
-  @apply md:mr-3;
+    @apply md:mr-3;
 }
 
 .level.mobile {
-  @apply flex;
+    @apply flex;
 }
 
 .level.mobile .level-item {
-  @apply flex-grow;
+    @apply flex-grow;
 }
 
 .level.mobile.card-widget .level-item:first-child {
-  @apply justify-start;
+    @apply justify-start;
 }
 
 .level.mobile.card-widget .level-item:last-child {
-  @apply flex-grow-0 justify-end;
+    @apply flex-grow-0 justify-end;
 }
 
 .level.mobile .level-item:not(:last-child) {
-  @apply mr-3;
+    @apply mr-3;
 }
 
 

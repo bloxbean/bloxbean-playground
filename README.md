@@ -1,9 +1,10 @@
 ## BloxBean Playground
 
 ### Demo
+
 https://playground.bloxbean.com/
 
-**Note:** Try only with Testnet account 
+**Note:** Try only with Testnet account
 
 ## Build Java Backend
 
@@ -33,8 +34,6 @@ $> cd app
 $> npm install
 $> npm run serve
 ```
-
-
 
 ## Using Docker
 

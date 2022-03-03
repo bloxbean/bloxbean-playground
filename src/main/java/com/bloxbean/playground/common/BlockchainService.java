@@ -15,6 +15,7 @@ public class BlockchainService {
 //    @Value("${bf_project_id}")
 //    private String bfProjectId;
 
+    BackendService backendService;
     FeeCalculationService feeCalculationService;
     TransactionHelperService transactionHelperService;
     TransactionService transactionService;
@@ -25,8 +26,8 @@ public class BlockchainService {
     EpochService epochService;
     UtxoTransactionBuilder utxoTransactionBuilder;
 
-    public BlockchainService(@Value("${bf_testnet_project_id}")String bfProjectId) {
-        BackendService backendService =
+    public BlockchainService(@Value("${bf_testnet_project_id}") String bfProjectId) {
+        backendService =
                 BackendFactory.getBlockfrostBackendService(Constants.BLOCKFROST_TESTNET_URL, bfProjectId);
 
         feeCalculationService = backendService.getFeeCalculationService();
@@ -38,6 +39,10 @@ public class BlockchainService {
         networkInfoService = backendService.getNetworkInfoService();
         epochService = backendService.getEpochService();
         utxoTransactionBuilder = backendService.getUtxoTransactionBuilder();
+    }
+
+    public BackendService getBackendService() {
+        return backendService;
     }
 
     public FeeCalculationService getFeeCalculationService() {

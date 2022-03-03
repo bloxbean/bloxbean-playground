@@ -3,4 +3,4 @@ defaultPackage: com.bloxbean
 testFramework: junit
 sourceLanguage: java
 buildTool: gradle
-features: [annotation-api, app-name, assertj, graalvm, gradle, http-client, java, java-application, junit, logback, lombok, micronaut-build, mockito, netty-server, openapi, properties, readme, redis-lettuce, shade, spring, spring-boot, spring-web]
+features: [ annotation-api, app-name, assertj, graalvm, gradle, http-client, java, java-application, junit, logback, lombok, micronaut-build, mockito, netty-server, openapi, properties, readme, redis-lettuce, shade, spring, spring-boot, spring-web ]

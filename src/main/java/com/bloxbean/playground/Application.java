@@ -5,10 +5,10 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
 @OpenAPIDefinition(
-    info = @Info(
-            title = "bloxbean-playground",
-            version = "0.1"
-    )
+        info = @Info(
+                title = "bloxbean-playground",
+                version = "0.1"
+        )
 )
 public class Application {
 

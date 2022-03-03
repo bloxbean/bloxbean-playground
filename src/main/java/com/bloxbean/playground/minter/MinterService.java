@@ -51,7 +51,7 @@ public class MinterService {
     private BlockchainService blockchainService;
 
     @Inject
-    private StatefulRedisConnection<String,String> connection;
+    private StatefulRedisConnection<String, String> connection;
 
     @Inject
     private RandomGenerator randomGenerator;
@@ -69,7 +69,7 @@ public class MinterService {
     public MintingTxnBody buildMintTxnBody(String mintingAddress, String receiver, int quantity)
             throws ApiException, CborSerializationException, AddressExcepion, CborException, IOException, CborDeserializationException {
 
-        if (quantity <= 0 && quantity >3)
+        if (quantity <= 0 && quantity > 3)
             throw new RuntimeException("Invalid quantity : " + quantity);
 
         //For Mint
@@ -77,7 +77,7 @@ public class MinterService {
         String policyId = policy.getPolicyId();
 
         List<NFT> nfts = new ArrayList<>();
-        for (int i=0; i<quantity; i++) {
+        for (int i = 0; i < quantity; i++) {
             NFT nft = nftProvider.getRandomNft();
             nfts.add(nft);
         }
@@ -208,7 +208,7 @@ public class MinterService {
         Account dummyAccount = new Account(Networks.testnet()); //TODO -- check if network required
         Transaction signedTxn = dummyAccount.sign(transaction);
 
-        for (SecretKey sk: policy.getPolicyKeys()) {
+        for (SecretKey sk : policy.getPolicyKeys()) {
             signedTxn = TransactionSigner.INSTANCE.sign(signedTxn, sk);
         }
 
@@ -249,7 +249,7 @@ public class MinterService {
 
         //Decode Nami's witness cbor
         List<DataItem> dis = CborDecoder.decode(HexUtil.decodeHexString(walletWitnessHex));
-        co.nstant.in.cbor.model.Map witnessMap = (Map)dis.get(0);
+        co.nstant.in.cbor.model.Map witnessMap = (Map) dis.get(0);
         TransactionWitnessSet walletWitnessSet = TransactionWitnessSet.deserialize(witnessMap);
 
         if (transaction.getWitnessSet() == null) {

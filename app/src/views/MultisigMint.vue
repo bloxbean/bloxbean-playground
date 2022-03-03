@@ -1,5 +1,5 @@
 <template>
-  <wallet-connect />
+  <wallet-connect/>
   <main-section>
     <tiles>
       <card-component title="Random NFT generator" :icon="mdiAccountCircle" class="tile is-child">
@@ -12,21 +12,24 @@
 
               v-model="quantity"
               :value="1"
-              class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+              type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
             <label class="form-check-label inline-block text-gray-800">1</label>
           </div>
           <div class="form-check form-check-inline">
             <input
               v-model="quantity"
               :value="2"
-              class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+              type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
             <label class="form-check-label inline-block text-gray-800">2</label>
           </div>
           <div class="form-check form-check-inline">
             <input
               v-model="quantity"
               :value="3"
-              class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+              class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+              type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
             <label class="form-check-label inline-block text-gray-800">3</label>
           </div>
         </div>
@@ -34,20 +37,19 @@
           <divider/>
           <field>
             <control>
-              <div class="flex justify-center">
+              <div class="flex justify-center mt-5">
                 <button :class="address? '': 'disabled:opacity-75'"
                         @click="buildTransaction"
                         type="submit"
-                        class="button blue"
+                        class="button small blue"
                         v-if="!processing && connected">
                   <span>Click To Mint</span>
                 </button>
-                <span v-else>{{processingMsg}}</span>
+                <span v-else>{{ processingMsg }}</span>
 
                 <button :class="address? '': 'disabled:opacity-75'"
-                        @click="buildTransaction"
                         type="submit"
-                        class="button blue"
+                        class="button small blue"
                         v-if="!connected" disabled>
                   <span>Not Connected</span>
                 </button>
@@ -66,9 +68,15 @@
     <tiles>
       <card-component title="NFT Details" :icon="mdiAccount" class="tile is-child">
         <div class="font-semibold text-gray-500">Transaction Hash:</div>
-        <div class="text-gray-500 mt-3.5"><a v-bind:href="'https://testnet.cardanoscan.io/transaction/' + transactionHash" target="_blank">{{transactionHash}}</a></div>
-                <div class="font-semibold mt-3.5 text-gray-500">NFT Json:</div>
-                <div class="text-gray-500 text-sm">{{nftJson}}</div>
+        <div class="text-gray-500 mt-3.5"><a
+          v-bind:href="'https://testnet.cardanoscan.io/transaction/' + transactionHash"
+          target="_blank">{{ transactionHash }}</a></div>
+        <div class="font-semibold mt-3.5 text-gray-500">NFT Metadata:</div>
+        <div class="flex justify-center mt-3.5">
+          <textarea class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                    rows="10">{{nftJson}}</textarea>
+        </div>
+
       </card-component>
     </tiles>
 
@@ -76,17 +84,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { mdiMonitorCellphone, mdiAccountMultiple, mdiTableBorder, mdiTableOff } from '@mdi/js'
-import MainSection from '@/components/MainSection'
-// import Notification from '@/components/Notification'
-// import ClientsTable from '@/components/ClientsTable'
 import CardComponent from '@/components/CardComponent'
-import TitleBar from '@/components/TitleBar'
-import HeroBar from '@/components/HeroBar'
 import Tiles from '@/components/Tiles'
-import FilePicker from '@/components/FilePicker'
-import Divider from '@/components/Divider'
 import Field from '@/components/Field'
 import Control from '@/components/Control'
 import {api_base_url} from "../../config";
@@ -96,17 +95,10 @@ export default {
   name: 'Tables',
   components: {
     WalletConnect,
-    MainSection,
-    HeroBar,
     Tiles,
-    TitleBar,
     CardComponent,
-    FilePicker,
-    Divider,
     Field,
     Control
-    // ClientsTable,
-    // Notification
   },
   data() {
     return ({
@@ -117,16 +109,8 @@ export default {
       transactionHash: ''
     });
   },
-  setup () {
-    const titleStack = ref(['App', 'Minter'])
-
-    return {
-      titleStack,
-      mdiMonitorCellphone,
-      mdiAccountMultiple,
-      mdiTableBorder,
-      mdiTableOff
-    }
+  setup() {
+    return {}
   },
   computed: {
     connected() {
@@ -145,6 +129,9 @@ export default {
       let reqId;
       let txnHex;
 
+      this.transactionHash = ''
+      this.nftJson = ''
+
       try {
         res = await fetch(`${api_base_url}/minter/tx-body`, {
           method: 'POST',
@@ -158,11 +145,18 @@ export default {
           })
         })
 
-        let body = await res.json()
-        reqId = body.reqId
-        txnHex = body.txnBody
+        this.processingStopped()
 
-        console.log(txnHex)
+        if (res.status == 200) {
+          let body = await res.json()
+          reqId = body.reqId
+          txnHex = body.txnBody
+
+          console.log(txnHex)
+        } else {
+          this.resultJson = await res.text()
+          return
+        }
 
         this.processingStarted("Waiting for transaction sign ...")
         witnessCbor = await this.$store.state.wallet.signTx(txnHex)
@@ -194,11 +188,16 @@ export default {
 
       this.processingStopped()
 
-      let txnResp = await txnResponse.json()
-      this.transactionHash = txnResp.txHash;
-      this.nftJson = txnResp.nftJson;
+      if (txnResponse.status == 200) {
+        let txnResp = await txnResponse.json()
+        this.transactionHash = txnResp.txHash;
+        this.nftJson = txnResp.nftJson;
 
-      console.log(txnResp);
+        console.log(txnResp);
+      } else {
+        this.transactionHash = ''
+        this.nftJson = await txnResponse.text()
+      }
     },
     processingStarted(msg) {
       this.processing = true

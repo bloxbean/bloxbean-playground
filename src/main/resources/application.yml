@@ -25,3 +25,5 @@ redis:
 
 ---
 bf_testnet_project_id:
+admin_token_unit:
+
