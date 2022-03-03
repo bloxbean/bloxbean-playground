@@ -6,10 +6,6 @@ import jakarta.inject.Singleton;
 
 @Singleton
 public class CacheService {
-
     @Inject
     private StatefulRedisConnection<String, String> connection;
-
-//    public void
-
 }
