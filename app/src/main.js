@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 
 import App from './App.vue'
 import router from './router'
@@ -7,7 +7,7 @@ import store from './store'
 import './css/main.css'
 
 /* Default title tag */
-const defaultDocumentTitle = 'Admin One Vue 3 Tailwind'
+const defaultDocumentTitle = 'BloxBean Playground'
 
 /* Collapse mobile aside menu on route change & set document title from route meta */
 router.afterEach(to => {

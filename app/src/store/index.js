@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import {createStore} from 'vuex'
 import Wallet from "../util/wallet";
 
 export default createStore({
@@ -6,6 +6,8 @@ export default createStore({
     wallet: new Wallet(),
     address: null,
     connected: false,
+    sessionId: null,
+    role: null,
     // /* Aside */
     isAsideMobileExpanded: false
   },
@@ -17,10 +19,16 @@ export default createStore({
     disconnect(state) {
       state.address = null
       state.connected = false
+      state.sessionId = null
+      state.role = null
       state.wallet.reset()
     },
+    setSession(state, session) {
+      state.sessionId = session.sessionId
+      state.role = session.role
+    },
     /* A fit-them-all commit */
-    basic (state, payload) {
+    basic(state, payload) {
       state[payload.key] = payload.value
     },
   },
@@ -30,7 +38,7 @@ export default createStore({
       const address = await state.wallet.getUseAddress()
       commit('setAddress', address)
     },
-    asideMobileToggle ({ commit, state }, payload = null) {
+    asideMobileToggle({commit, state}, payload = null) {
       const isShow = payload !== null ? payload : !state.isAsideMobileExpanded
 
       document.getElementById('app').classList[isShow ? 'add' : 'remove']('ml-60')
@@ -44,10 +52,9 @@ export default createStore({
     },
   },
   getters: {
-      getAddress: state => {
-        return state.address
-      }
+    getAddress: state => {
+      return state.address
+    }
   },
-  modules: {
-  }
+  modules: {}
 })

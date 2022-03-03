@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 
 const routes = [
   {
@@ -20,13 +20,29 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "tables" */ '../views/MultisigMint')
   },
+  {
+    meta: {
+      title: 'Faucet Admin'
+    },
+    path: '/faucet-admin',
+    name: 'faucet-admin',
+    component: () => import(/* webpackChunkName: "tables" */ '../views/faucet/FaucetAdmin')
+  },
+  {
+    meta: {
+      title: 'Get Token'
+    },
+    path: '/faucet-drop',
+    name: 'faucet-drop',
+    component: () => import(/* webpackChunkName: "tables" */ '../views/faucet/GetToken')
+  },
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-  scrollBehavior (to, from, savedPosition) {
-    return savedPosition || { x: 0, y: 0 }
+  scrollBehavior(to, from, savedPosition) {
+    return savedPosition || {x: 0, y: 0}
   }
 })
 

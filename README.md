@@ -1,9 +1,10 @@
 ## BloxBean Playground
 
 ### Demo
+
 https://playground.bloxbean.com/
 
-**Note:** Try only with Testnet account 
+**Note:** Try only with Testnet account
 
 ## Build Java Backend
 
@@ -34,10 +35,8 @@ $> npm install
 $> npm run serve
 ```
 
-
-
 ## Using Docker
 
-docker buildx build --platform=linux/amd64 -t bloxbean/bloxbean-playground-api:0.2 . --push
+docker buildx build --platform=linux/amd64 -t bloxbean/bloxbean-playground-api:0.3 . --push
 
 
