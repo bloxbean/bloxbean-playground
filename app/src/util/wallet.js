@@ -39,7 +39,7 @@ class Wallet {
   }
 
   async signTx(txnBody) {
-    const txCbor = await this.api.signTx(txnBody)
+    const txCbor = await this.api.signTx(txnBody, true)
 
     return txCbor
   }
