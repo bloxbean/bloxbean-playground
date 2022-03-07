@@ -37,6 +37,6 @@ $> npm run serve
 
 ## Using Docker
 
-docker buildx build --platform=linux/amd64 -t bloxbean/bloxbean-playground-api:0.3 . --push
+docker buildx build --platform=linux/amd64 -t bloxbean/bloxbean-playground-api:0.5 . --push
 
 

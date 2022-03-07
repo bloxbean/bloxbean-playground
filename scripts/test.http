@@ -46,14 +46,24 @@ Content-Type: application/json
 ## Distribute
 ## Policy : c48f707fea6f08af67a8c06c9bea5b3ec847f5901dc08420cd7f8ade  BLOXB
 
-POST http://localhost:8080/faucet/bloxb1/topup
+POST http://localhost:8080/faucet/cad/topup
 Content-Type: application/json
 
 {
-  "sender": "addr_test1qpe9rktvrx6dmh5xz9tkk9eqlyeevtqhe4wxa6m0cftlawxhv8kqvcufzswvffew2k24lqjzgke7yeu8vgdarctqxlls5hnffy",
-  "policyId": "c48f707fea6f08af67a8c06c9bea5b3ec847f5901dc08420cd7f8ade",
-  "assetName": "BLOXB",
-  "qty": 150000000
+  "sender": "addr_test1qpjvn3qur4y04rf9yutvvslzz9lz4747mv3wxrjm982tasn87eydaex66824nc44gs9asm8njqsfgny6gz00xa3477csfttq43",
+  "policyId": "ac6d9e75ca58379c394378a64ae24eddf72b2e78d73f635bac32d03d",
+  "assetName": "CAD",
+  "qty": 20000
+}
+
+###
+## Topup transfer
+POST http://localhost:8080/faucet/cad/topup/transfer
+Content-Type: application/json
+
+{
+  "reqId": "req_id_5dd22f2d-519c-450d-ad3e-93909b09463a",
+  "walletWitnessHex": "a1008182582074f09b5cfe355d5ce8712c545e186bef58b20fb9101e06a678e485e8890b9f815840ff5e61983eedfd113f94a1752584aaf06b40e8bee0eb774a9971a2faed9ec1ae1b390642a6c6f29863f044ce8fae473547a6c643188c0bcd83aa972fa6e33604"
 }
 
 

@@ -19,7 +19,6 @@ import com.bloxbean.cardano.client.function.helper.InputBuilders;
 import com.bloxbean.cardano.client.transaction.spec.Transaction;
 import com.bloxbean.cardano.client.transaction.spec.TransactionBody;
 import com.bloxbean.cardano.client.transaction.spec.TransactionWitnessSet;
-import com.bloxbean.cardano.client.transaction.util.CborSerializationUtil;
 import com.bloxbean.cardano.client.util.HexUtil;
 import com.bloxbean.playground.common.BlockchainService;
 import com.bloxbean.playground.common.RandomGenerator;
@@ -83,12 +82,12 @@ public class TopupFaucetService {
                 .andThen(FeeCalculators.feeCalculator(topupTxnRequest.sender(), 1))
                 .andThen(ChangeOutputAdjustments.adjustChangeOutput(topupTxnRequest.sender()));
 
-        TxBuilderContext txBuilderContext = TxBuilderContext.init(blockchainService.getBackendService());
+        TxBuilderContext txBuilderContext = new TxBuilderContext(blockchainService.getBackendService());
+       // txBuilderContext.setUtxoSelectionStrategy(new LargestFirstUtxoSelectionStrategy(blockchainService.getUtxoService()));
         Transaction transaction = txBuilderContext.build(txBuilder);
 
         System.out.println(transaction);
         TransactionBody txnBody = transaction.getBody();
-        String txnBodyHex = HexUtil.encodeHexString(CborSerializationUtil.serialize(txnBody.serialize()));
 
         //clone
         Transaction cloneTransaciton = Transaction.deserialize(transaction.serialize());

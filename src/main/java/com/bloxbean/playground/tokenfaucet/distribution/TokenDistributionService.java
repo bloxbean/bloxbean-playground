@@ -128,12 +128,14 @@ public class TokenDistributionService {
                 .andThen(FeeCalculators.feeCalculator(distRequest.receiver(), 2))
                 .andThen(ChangeOutputAdjustments.adjustChangeOutput(distRequest.receiver(), 2));
 
-        TxBuilderContext txBuilderContext = TxBuilderContext.init(blockchainService.getBackendService());
-        Transaction transaction = txBuilderContext.buildAndSign(txBuilder, signerFrom(faucetAccount));
+
+        TxBuilderContext txBuilderContext = new TxBuilderContext(blockchainService.getBackendService());
+//        txBuilderContext.setUtxoSelectionStrategy(new LargestFirstUtxoSelectionStrategy(blockchainService.getUtxoService()));
+        Transaction transaction = txBuilderContext.build(txBuilder);
+
+        transaction = signerFrom(faucetAccount).sign(transaction);
 
         System.out.println(transaction);
-        TransactionBody txnBody = transaction.getBody();
-        String txnBodyHex = HexUtil.encodeHexString(CborSerializationUtil.serialize(txnBody.serialize()));
 
         //clone
         Transaction cloneTransaciton = Transaction.deserialize(transaction.serialize());
@@ -157,7 +159,6 @@ public class TokenDistributionService {
 
         //De-serialize original txn hash
         Transaction transaction = Transaction.deserialize(HexUtil.decodeHexString(txnHex));
-
         //Decode Nami's witness cbor
         List<DataItem> dis = CborDecoder.decode(HexUtil.decodeHexString(walletWitnessHex));
         co.nstant.in.cbor.model.Map witnessMap = (Map) dis.get(0);
