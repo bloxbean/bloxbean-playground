@@ -4,8 +4,10 @@ import co.nstant.in.cbor.CborDecoder;
 import co.nstant.in.cbor.CborException;
 import co.nstant.in.cbor.model.DataItem;
 import co.nstant.in.cbor.model.Map;
-import com.bloxbean.cardano.client.backend.exception.ApiException;
-import com.bloxbean.cardano.client.backend.model.Result;
+import com.bloxbean.cardano.client.api.exception.ApiException;
+import com.bloxbean.cardano.client.api.model.Result;
+import com.bloxbean.cardano.client.backend.api.DefaultProtocolParamsSupplier;
+import com.bloxbean.cardano.client.backend.api.DefaultUtxoSupplier;
 import com.bloxbean.cardano.client.exception.AddressExcepion;
 import com.bloxbean.cardano.client.exception.CborDeserializationException;
 import com.bloxbean.cardano.client.exception.CborSerializationException;
@@ -82,7 +84,8 @@ public class TopupFaucetService {
                 .andThen(FeeCalculators.feeCalculator(topupTxnRequest.sender(), 1))
                 .andThen(ChangeOutputAdjustments.adjustChangeOutput(topupTxnRequest.sender()));
 
-        TxBuilderContext txBuilderContext = new TxBuilderContext(blockchainService.getBackendService());
+        TxBuilderContext txBuilderContext = new TxBuilderContext(new DefaultUtxoSupplier(blockchainService.getUtxoService()),
+                new DefaultProtocolParamsSupplier(blockchainService.getEpochService()));
        // txBuilderContext.setUtxoSelectionStrategy(new LargestFirstUtxoSelectionStrategy(blockchainService.getUtxoService()));
         Transaction transaction = txBuilderContext.build(txBuilder);
 

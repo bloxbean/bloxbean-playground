@@ -39,7 +39,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    implementation 'com.bloxbean.cardano:cardano-client-lib:0.2.0-beta3-SNAPSHOT'
+    implementation 'com.bloxbean.cardano:cardano-client-lib:0.2.0-beta3'
+    implementation 'com.bloxbean.cardano:cardano-client-backend-blockfrost:0.2.0-beta3'
 
     implementation 'io.blockfrost:blockfrost-java:0.1.0-beta3'
     implementation 'org.apache.commons:commons-lang3:3.12.0'

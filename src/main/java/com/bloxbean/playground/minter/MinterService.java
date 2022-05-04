@@ -5,9 +5,10 @@ import co.nstant.in.cbor.CborException;
 import co.nstant.in.cbor.model.DataItem;
 import co.nstant.in.cbor.model.Map;
 import com.bloxbean.cardano.client.account.Account;
-import com.bloxbean.cardano.client.backend.exception.ApiException;
-import com.bloxbean.cardano.client.backend.model.Result;
-import com.bloxbean.cardano.client.backend.model.Utxo;
+import com.bloxbean.cardano.client.api.exception.ApiException;
+import com.bloxbean.cardano.client.api.model.Result;
+import com.bloxbean.cardano.client.api.model.Utxo;
+import com.bloxbean.cardano.client.backend.api.DefaultUtxoSupplier;
 import com.bloxbean.cardano.client.cip.cip25.NFT;
 import com.bloxbean.cardano.client.cip.cip25.NFTMetadata;
 import com.bloxbean.cardano.client.coinselection.UtxoSelectionStrategy;
@@ -98,7 +99,7 @@ public class MinterService {
             multiAsset.getAssets().add(asset1);
         });
 
-        long ttl = blockchainService.getBlockService().getLastestBlock().getValue().getSlot() + 20000;
+        long ttl = blockchainService.getBlockService().getLatestBlock().getValue().getSlot() + 20000;
         TransactionDetailsParams detailsParams = TransactionDetailsParams.builder().ttl(ttl).build();
 
         //Total token price
@@ -130,7 +131,7 @@ public class MinterService {
 
         //Build Inputs
         //Find required utxos
-        UtxoSelector utxoSelector = new DefaultUtxoSelector(blockchainService.getUtxoService());
+        UtxoSelector utxoSelector = new DefaultUtxoSelector(new DefaultUtxoSupplier(blockchainService.getUtxoService()));
 
         //Find utxo with only lovelace
         Optional<Utxo> optionalUtxo = utxoSelector.findFirst(mintingAddress, (ux) -> ux.getAmount().size() == 1 && ux.getAmount().stream()
@@ -148,7 +149,8 @@ public class MinterService {
         List<Utxo> utxos = new ArrayList<>();
 
         if (optionalUtxo.isEmpty()) {
-            UtxoSelectionStrategy utxoSelectionStrategy = new DefaultUtxoSelectionStrategyImpl(blockchainService.getUtxoService());
+            UtxoSelectionStrategy utxoSelectionStrategy =
+                    new DefaultUtxoSelectionStrategyImpl(new DefaultUtxoSupplier(blockchainService.getUtxoService()));
             utxos = utxoSelectionStrategy.selectUtxos(mintingAddress, LOVELACE, totalAmount, Collections.EMPTY_SET);
         } else {
             utxos.add(optionalUtxo.get());

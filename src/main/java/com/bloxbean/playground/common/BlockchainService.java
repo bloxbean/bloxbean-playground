@@ -1,11 +1,11 @@
 package com.bloxbean.playground.common;
 
+import com.bloxbean.cardano.client.api.helper.FeeCalculationService;
+import com.bloxbean.cardano.client.api.helper.TransactionHelperService;
+import com.bloxbean.cardano.client.api.helper.UtxoTransactionBuilder;
 import com.bloxbean.cardano.client.backend.api.*;
-import com.bloxbean.cardano.client.backend.api.helper.FeeCalculationService;
-import com.bloxbean.cardano.client.backend.api.helper.TransactionHelperService;
-import com.bloxbean.cardano.client.backend.api.helper.UtxoTransactionBuilder;
-import com.bloxbean.cardano.client.backend.factory.BackendFactory;
-import com.bloxbean.cardano.client.backend.impl.blockfrost.common.Constants;
+import com.bloxbean.cardano.client.backend.blockfrost.common.Constants;
+import com.bloxbean.cardano.client.backend.blockfrost.service.BFBackendService;
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 
@@ -28,7 +28,7 @@ public class BlockchainService {
 
     public BlockchainService(@Value("${bf_testnet_project_id}") String bfProjectId) {
         backendService =
-                BackendFactory.getBlockfrostBackendService(Constants.BLOCKFROST_TESTNET_URL, bfProjectId);
+                new BFBackendService(Constants.BLOCKFROST_TESTNET_URL, bfProjectId);
 
         feeCalculationService = backendService.getFeeCalculationService();
         transactionHelperService = backendService.getTransactionHelperService();
