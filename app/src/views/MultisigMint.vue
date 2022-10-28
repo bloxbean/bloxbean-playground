@@ -2,7 +2,7 @@
   <wallet-connect/>
   <main-section>
     <tiles>
-      <card-component title="Random NFT generator" :icon="mdiAccountCircle" class="tile is-child">
+      <card-component title="Random NFT generator (Prepod network)" :icon="mdiAccountCircle" class="tile is-child">
         <div class="flex justify-center mb-3.5">
           <span class="font-semibold">How many ? (15 tAda / NFT)</span>
         </div>
