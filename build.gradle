@@ -1,9 +1,9 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.1"
-    id("io.micronaut.application") version "3.1.1"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
 }
 
-version = "0.6"
+version = "0.7"
 group = "com.bloxbean"
 
 repositories {
@@ -39,8 +39,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    implementation 'com.bloxbean.cardano:cardano-client-lib:0.2.0-beta3'
-    implementation 'com.bloxbean.cardano:cardano-client-backend-blockfrost:0.2.0-beta3'
+    implementation 'com.bloxbean.cardano:cardano-client-lib:0.3.0'
+    implementation 'com.bloxbean.cardano:cardano-client-backend-blockfrost:0.3.0'
 
     implementation 'io.blockfrost:blockfrost-java:0.1.0-beta3'
     implementation 'org.apache.commons:commons-lang3:3.12.0'

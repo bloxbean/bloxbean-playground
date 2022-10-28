@@ -52,7 +52,7 @@ public class NFTAccessService {
                 return true;
             else
                 return false;
-        } catch (ApiException apiException) {
+        } catch (Exception apiException) {
             return false;
         }
     }

@@ -1,5 +1,7 @@
 package com.bloxbean.playground.common;
 
+import com.bloxbean.cardano.client.api.ProtocolParamsSupplier;
+import com.bloxbean.cardano.client.api.UtxoSupplier;
 import com.bloxbean.cardano.client.api.helper.FeeCalculationService;
 import com.bloxbean.cardano.client.api.helper.TransactionHelperService;
 import com.bloxbean.cardano.client.api.helper.UtxoTransactionBuilder;
@@ -25,10 +27,12 @@ public class BlockchainService {
     UtxoService utxoService;
     EpochService epochService;
     UtxoTransactionBuilder utxoTransactionBuilder;
+    UtxoSupplier utxoSupplier;
+    ProtocolParamsSupplier protocolParamsSupplier;
 
     public BlockchainService(@Value("${bf_testnet_project_id}") String bfProjectId) {
         backendService =
-                new BFBackendService(Constants.BLOCKFROST_TESTNET_URL, bfProjectId);
+                new BFBackendService(Constants.BLOCKFROST_PREPOD_URL, bfProjectId);
 
         feeCalculationService = backendService.getFeeCalculationService();
         transactionHelperService = backendService.getTransactionHelperService();
@@ -39,6 +43,9 @@ public class BlockchainService {
         networkInfoService = backendService.getNetworkInfoService();
         epochService = backendService.getEpochService();
         utxoTransactionBuilder = backendService.getUtxoTransactionBuilder();
+
+        utxoSupplier = new DefaultUtxoSupplier(backendService.getUtxoService());
+        protocolParamsSupplier = new DefaultProtocolParamsSupplier(backendService.getEpochService());
     }
 
     public BackendService getBackendService() {
@@ -79,5 +86,13 @@ public class BlockchainService {
 
     public UtxoTransactionBuilder getUtxoTransactionBuilder() {
         return utxoTransactionBuilder;
+    }
+
+    public UtxoSupplier getUtxoSupplier() {
+        return utxoSupplier;
+    }
+
+    public ProtocolParamsSupplier getProtocolParamsSupplier() {
+        return protocolParamsSupplier;
     }
 }

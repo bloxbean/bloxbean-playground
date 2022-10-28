@@ -44,6 +44,29 @@ class Wallet {
     return txCbor
   }
 
+  async signData(message) {
+    const addresses = await this.api.getUsedAddresses();
+
+    const msgHex = this.convertToHex(message);
+    console.log("******" + msgHex)
+    // try {
+      const dataSignature = await this.api.signData(addresses[0], msgHex)
+      console.log(dataSignature)
+      return dataSignature
+    // } catch(err) {
+    //   console.log("%%%%")
+    //   console.log(err)
+    // }
+  }
+
+  convertToHex(str) {
+    var hex = '';
+    for(var i=0;i<str.length;i++) {
+      hex += ''+str.charCodeAt(i).toString(16);
+    }
+    return hex;
+  }
+
   reset() {
     this.walletType = null
     this.api = null
