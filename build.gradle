@@ -3,7 +3,7 @@ plugins {
     id("io.micronaut.application") version "3.6.2"
 }
 
-version = "0.7"
+version = "0.8"
 group = "com.bloxbean"
 
 repositories {
