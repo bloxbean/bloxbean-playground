@@ -4,8 +4,10 @@ import co.nstant.in.cbor.CborDecoder;
 import co.nstant.in.cbor.CborException;
 import co.nstant.in.cbor.model.DataItem;
 import co.nstant.in.cbor.model.Map;
-import com.bloxbean.cardano.client.backend.exception.ApiException;
-import com.bloxbean.cardano.client.backend.model.Result;
+import com.bloxbean.cardano.client.api.exception.ApiException;
+import com.bloxbean.cardano.client.api.model.Result;
+import com.bloxbean.cardano.client.backend.api.DefaultProtocolParamsSupplier;
+import com.bloxbean.cardano.client.backend.api.DefaultUtxoSupplier;
 import com.bloxbean.cardano.client.exception.AddressExcepion;
 import com.bloxbean.cardano.client.exception.CborDeserializationException;
 import com.bloxbean.cardano.client.exception.CborSerializationException;
@@ -19,7 +21,6 @@ import com.bloxbean.cardano.client.function.helper.InputBuilders;
 import com.bloxbean.cardano.client.transaction.spec.Transaction;
 import com.bloxbean.cardano.client.transaction.spec.TransactionBody;
 import com.bloxbean.cardano.client.transaction.spec.TransactionWitnessSet;
-import com.bloxbean.cardano.client.transaction.util.CborSerializationUtil;
 import com.bloxbean.cardano.client.util.HexUtil;
 import com.bloxbean.playground.common.BlockchainService;
 import com.bloxbean.playground.common.RandomGenerator;
@@ -83,12 +84,13 @@ public class TopupFaucetService {
                 .andThen(FeeCalculators.feeCalculator(topupTxnRequest.sender(), 1))
                 .andThen(ChangeOutputAdjustments.adjustChangeOutput(topupTxnRequest.sender()));
 
-        TxBuilderContext txBuilderContext = TxBuilderContext.init(blockchainService.getBackendService());
+        TxBuilderContext txBuilderContext = new TxBuilderContext(new DefaultUtxoSupplier(blockchainService.getUtxoService()),
+                new DefaultProtocolParamsSupplier(blockchainService.getEpochService()));
+       // txBuilderContext.setUtxoSelectionStrategy(new LargestFirstUtxoSelectionStrategy(blockchainService.getUtxoService()));
         Transaction transaction = txBuilderContext.build(txBuilder);
 
         System.out.println(transaction);
         TransactionBody txnBody = transaction.getBody();
-        String txnBodyHex = HexUtil.encodeHexString(CborSerializationUtil.serialize(txnBody.serialize()));
 
         //clone
         Transaction cloneTransaciton = Transaction.deserialize(transaction.serialize());

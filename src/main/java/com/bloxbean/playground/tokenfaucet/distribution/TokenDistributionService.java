@@ -4,10 +4,12 @@ import co.nstant.in.cbor.CborDecoder;
 import co.nstant.in.cbor.model.DataItem;
 import co.nstant.in.cbor.model.Map;
 import com.bloxbean.cardano.client.account.Account;
-import com.bloxbean.cardano.client.backend.exception.ApiException;
-import com.bloxbean.cardano.client.backend.exception.ApiRuntimeException;
-import com.bloxbean.cardano.client.backend.model.Result;
-import com.bloxbean.cardano.client.backend.model.Utxo;
+import com.bloxbean.cardano.client.api.exception.ApiException;
+import com.bloxbean.cardano.client.api.exception.ApiRuntimeException;
+import com.bloxbean.cardano.client.api.model.Result;
+import com.bloxbean.cardano.client.api.model.Utxo;
+import com.bloxbean.cardano.client.backend.api.DefaultProtocolParamsSupplier;
+import com.bloxbean.cardano.client.backend.api.DefaultUtxoSupplier;
 import com.bloxbean.cardano.client.coinselection.UtxoSelectionStrategy;
 import com.bloxbean.cardano.client.coinselection.impl.DefaultUtxoSelectionStrategyImpl;
 import com.bloxbean.cardano.client.common.MinAdaCalculator;
@@ -87,7 +89,8 @@ public class TokenDistributionService {
                 .qty(distRequest.qty()).build();
 
         String unit = AssetUtil.getUnit(distRequest.policyId(), Asset.builder().name(distRequest.assetName()).build());
-        UtxoSelectionStrategy utxoSelectionStrategy = new DefaultUtxoSelectionStrategyImpl(blockchainService.getUtxoService());
+        UtxoSelectionStrategy utxoSelectionStrategy =
+                new DefaultUtxoSelectionStrategyImpl(new DefaultUtxoSupplier(blockchainService.getUtxoService()));
         List<Utxo> faucetUtxos = utxoSelectionStrategy.selectUtxos(faucetAddress, unit, distRequest.qty(), Collections.EMPTY_SET);
 
         //For receiver output
@@ -95,7 +98,8 @@ public class TokenDistributionService {
 //                .buildInputs(createFromSender(faucetAddress, faucetAddress));
                 .buildInputs(createFromUtxos(faucetUtxos, faucetAddress));
 
-        Transaction txn = TxBuilderContext.init(blockchainService.getBackendService())
+        Transaction txn = TxBuilderContext.init(new DefaultUtxoSupplier(blockchainService.getUtxoService()),
+                new DefaultProtocolParamsSupplier(blockchainService.getEpochService()))
                 .build(receiverOutputTxBuilder);
 
         BigInteger refundLovelace = getMinAdaForSingleTokenTransfer(distRequest.policyId(), distRequest.assetName());
@@ -128,12 +132,15 @@ public class TokenDistributionService {
                 .andThen(FeeCalculators.feeCalculator(distRequest.receiver(), 2))
                 .andThen(ChangeOutputAdjustments.adjustChangeOutput(distRequest.receiver(), 2));
 
-        TxBuilderContext txBuilderContext = TxBuilderContext.init(blockchainService.getBackendService());
-        Transaction transaction = txBuilderContext.buildAndSign(txBuilder, signerFrom(faucetAccount));
+
+        TxBuilderContext txBuilderContext = new TxBuilderContext(new DefaultUtxoSupplier(blockchainService.getUtxoService()),
+                new DefaultProtocolParamsSupplier(blockchainService.getEpochService()));
+//        txBuilderContext.setUtxoSelectionStrategy(new LargestFirstUtxoSelectionStrategy(blockchainService.getUtxoService()));
+        Transaction transaction = txBuilderContext.build(txBuilder);
+
+        transaction = signerFrom(faucetAccount).sign(transaction);
 
         System.out.println(transaction);
-        TransactionBody txnBody = transaction.getBody();
-        String txnBodyHex = HexUtil.encodeHexString(CborSerializationUtil.serialize(txnBody.serialize()));
 
         //clone
         Transaction cloneTransaciton = Transaction.deserialize(transaction.serialize());
@@ -157,7 +164,6 @@ public class TokenDistributionService {
 
         //De-serialize original txn hash
         Transaction transaction = Transaction.deserialize(HexUtil.decodeHexString(txnHex));
-
         //Decode Nami's witness cbor
         List<DataItem> dis = CborDecoder.decode(HexUtil.decodeHexString(walletWitnessHex));
         co.nstant.in.cbor.model.Map witnessMap = (Map) dis.get(0);

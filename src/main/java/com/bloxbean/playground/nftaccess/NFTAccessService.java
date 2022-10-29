@@ -1,7 +1,8 @@
 package com.bloxbean.playground.nftaccess;
 
-import com.bloxbean.cardano.client.backend.exception.ApiException;
-import com.bloxbean.cardano.client.backend.model.Utxo;
+import com.bloxbean.cardano.client.api.exception.ApiException;
+import com.bloxbean.cardano.client.api.model.Utxo;
+import com.bloxbean.cardano.client.backend.api.DefaultUtxoSupplier;
 import com.bloxbean.cardano.client.coinselection.UtxoSelectionStrategy;
 import com.bloxbean.cardano.client.coinselection.impl.DefaultUtxoSelectionStrategyImpl;
 import com.bloxbean.playground.common.BlockchainService;
@@ -44,14 +45,14 @@ public class NFTAccessService {
 
     private boolean isAdminTokenAvailable(String address) {
 
-        UtxoSelectionStrategy utxoSelectionStrategy = new DefaultUtxoSelectionStrategyImpl(blockchainService.getUtxoService());
+        UtxoSelectionStrategy utxoSelectionStrategy = new DefaultUtxoSelectionStrategyImpl(new DefaultUtxoSupplier(blockchainService.getUtxoService()));
         try {
             List<Utxo> utxoList = utxoSelectionStrategy.selectUtxos(address, adminTokenUnit, BigInteger.valueOf(1), Collections.EMPTY_SET);
             if (utxoList.size() > 0)
                 return true;
             else
                 return false;
-        } catch (ApiException apiException) {
+        } catch (Exception apiException) {
             return false;
         }
     }
