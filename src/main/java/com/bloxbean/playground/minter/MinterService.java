@@ -3,6 +3,7 @@ package com.bloxbean.playground.minter;
 import co.nstant.in.cbor.CborException;
 import co.nstant.in.cbor.model.DataItem;
 import co.nstant.in.cbor.model.Map;
+import com.bloxbean.cardano.client.address.Address;
 import com.bloxbean.cardano.client.api.exception.ApiException;
 import com.bloxbean.cardano.client.api.model.Amount;
 import com.bloxbean.cardano.client.api.model.Result;
@@ -102,6 +103,7 @@ public class MinterService {
 
         QuickTxBuilder quickTxBuilder = new QuickTxBuilder(blockchainService.getBackendService());
         Transaction transaction = quickTxBuilder.compose(tx)
+                .withRequiredSigners(new Address(mintingAddress))
                 .withUtxoSelectionStrategy(new LargestFirstUtxoSelectionStrategy(blockchainService.getUtxoSupplier()))
                 .additionalSignersCount(1) //As we need to sign with Native script during assemble phase
                 .build();
